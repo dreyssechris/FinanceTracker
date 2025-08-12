@@ -11,52 +11,70 @@ namespace FinanceTracker.Api.Controllers
     public class TransactionController : ControllerBase
     {
         private readonly AppDbContext _context;
-
         public TransactionController(AppDbContext context)
         {
             _context = context; 
         }
 
+        // Helper method to project Transaction entities to TransactionReadDto
+        private IQueryable<TransactionReadDto> ProjectToReadDto(IQueryable<Transaction> q) =>
+            q.Select(t => new TransactionReadDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Amount = t.Amount,
+                Date = t.Date,
+                Type = t.Type,
+                CategoryId = t.CategoryId
+            });
+
         [HttpGet]
         public IActionResult GetAll()
         {
-            var transactions = _context.Transactions
-                .Include(t => t.Category)
-                .ToList();
-
-            // 200 OK response with the list of transactions
-            return Ok(transactions);
+            var items = ProjectToReadDto(_context.Transactions.AsNoTracking()).ToList();
+            return Ok(items);
         }
 
-        [HttpGet]
-        public IActionResult GetbyId(int id)
+        [HttpGet("{id:int}")]
+        public IActionResult GetById(int id)
         {
-            var transaction = _context.Transactions.Find(id);
-            // If the transaction is not found, return a 404 Not Found response
-            return transaction is null ? NotFound() : Ok(transaction);
+            var dto = ProjectToReadDto(_context.Transactions.AsNoTracking()
+                      .Where(t => t.Id == id))
+                      .FirstOrDefault();
+
+            return dto is null ? NotFound() : Ok(dto);
         }
 
         [HttpPost]
-        public IActionResult Create(TransactionReadDTO dto)
+        public IActionResult Create(TransactionCreateDto dto)
         {
-            var transaction = new Transaction
+            if (!_context.Categories.Any(c => c.Id == dto.CategoryId))
+                return BadRequest("Unknown CategoryId.");
+
+            var entity = new Transaction
             {
                 Title = dto.Title,
                 Amount = dto.Amount,
                 Date = dto.Date,
                 Type = dto.Type,
-                CategoryId = dto.CategoryId,
-                C
+                CategoryId = dto.CategoryId
             };
 
-            _context.Transactions.Add(transaction);
+            _context.Transactions.Add(entity);
             _context.SaveChanges();
 
-            // Return the created transaction with a 201 Created response
-            // Uses the rooting Attri
-            return CreatedAtAction(nameof(GetAll), new { id = transaction.Id }, transaction);
+            // Don't use ProjectToReadDto here, extra DB query not needed
+            var read = new TransactionReadDto
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Amount = entity.Amount,
+                Date = entity.Date,
+                Type = entity.Type,
+                CategoryId = entity.CategoryId
+            };
 
+            return CreatedAtAction(nameof(GetById), new { id = read.Id }, read);
         }
-
     }
 }

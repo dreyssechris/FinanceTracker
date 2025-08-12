@@ -168,3 +168,4 @@ D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\refint\Finan
 D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\FinanceTracker.Api.pdb
 D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\FinanceTracker.Api.genruntimeconfig.cache
 D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\ref\FinanceTracker.Api.dll
+D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\FinanceTracker.Api.sourcelink.json
