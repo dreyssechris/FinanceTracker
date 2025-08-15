@@ -25,7 +25,22 @@ public class AppDbContext : DbContext
             .HasOne(t => t.Category)
             .WithMany(c => c.Transactions)
             .HasForeignKey(t => t.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict) // if tryed to delete a parent (category), with min 1 child a error is thrown ( FOREIGN KEY constraint violation)
             .IsRequired();
+
+        // Category Constraints
+        modelBuilder.Entity<Category>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+        // Standard category if category is skipped or deleted
+        modelBuilder.Entity<Category>().HasData(
+            new Category
+            {
+                Id = 1,
+                Name = "Uncategorized"
+            }
+        );
 
         base.OnModelCreating(modelBuilder);
     }
