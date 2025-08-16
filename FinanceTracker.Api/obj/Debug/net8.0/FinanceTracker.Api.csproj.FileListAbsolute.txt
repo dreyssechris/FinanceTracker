@@ -169,3 +169,5 @@ D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\FinanceTrack
 D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\FinanceTracker.Api.genruntimeconfig.cache
 D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\ref\FinanceTracker.Api.dll
 D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\obj\Debug\net8.0\FinanceTracker.Api.sourcelink.json
+D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\bin\Debug\net8.0\Npgsql.dll
+D:\git-repos\FinanceTracker.Api\FinanceTracker.Api\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
