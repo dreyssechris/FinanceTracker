@@ -78,6 +78,9 @@ namespace FinanceTracker.Api.Controllers
             if (entity is null) 
                 return NotFound();
 
+            if (entity.Id == 1)
+                return BadRequest("The default category 'Uncategorized' cannot be renamed.");
+
             var nameTaken = _context.Categories.Any(c => c.Id != id && string.Equals(c.Name.ToLower(), dto.Name.ToLower()));
             if (nameTaken) 
                 return Conflict("A category with this name already exists.");
@@ -91,28 +94,25 @@ namespace FinanceTracker.Api.Controllers
 
         // DELETE /api/categories/{id}
         [HttpDelete("{id:int}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == 1)
-                return BadRequest("Default category cannot be deleted."); 
+                return BadRequest("Default category cannot be deleted.");
 
-            var entity = _context.Categories
-                                 .Include(c => c.Transactions)
-                                 .FirstOrDefault(c => c.Id == id);
-
-            if (entity is null) 
+            var entity = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            if (entity is null)
                 return NotFound();
 
-            using var tx = _context.Database.BeginTransaction();
+            using var tx = await _context.Database.BeginTransactionAsync();
 
-            _context.Transactions
-                    .Where(t => t.CategoryId == id)
-                    .ExecuteUpdate(s => s.SetProperty(t => t.CategoryId, 1));
+            await _context.Transactions
+                .Where(t => t.CategoryId == id)
+                .ExecuteUpdateAsync(s => s.SetProperty(t => t.CategoryId, 1));
 
             _context.Categories.Remove(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            tx.Commit();
+            await tx.CommitAsync();
 
             return NoContent();
         }
