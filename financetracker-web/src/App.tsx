@@ -16,7 +16,6 @@ function App() {
       .then(data => setCategories(data)); 
   }, []);
 
-
   return (
     <div>
       <h1>FinanceTracker Categories</h1>
