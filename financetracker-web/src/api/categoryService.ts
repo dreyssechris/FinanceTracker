@@ -1,7 +1,7 @@
 // src/api/categoryService.ts
 import { api } from './http'; 
 
-interface Category {
+export interface Category {
   id: number;
   name: string; 
 }

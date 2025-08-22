@@ -1,31 +1,42 @@
 import { useEffect, useState } from 'react'
+import { NavLink, Routes, Route } from "react-router-dom";
 import './App.css'
 
-interface Category {
-  id: number;
-  name: string; 
+function DashboardPage() {
+  return <h1>Dashboard</h1>;
 }
 
-function App() {
+function CategoriesPage() {
+  return <h1>Categories (CRUD)</h1>;
+}
 
-  const [categories, setCategories] = useState<Category[]>([]); 
+function TransactionsPage() {
+  return <h1>Transactions (CRUD)</h1>;
+}
 
-  useEffect(() => {
-    fetch('/api/categories')
-      .then(response => response.json())
-      .then(data => setCategories(data)); 
-  }, []);
-
+/**
+ * App-Component – central entry point of frontend
+ * Configure routing with react-router-dom.
+ *
+ * - "/categories"   -> CategoriesPage
+ * - "/transactions" -> TransactionsPage
+ */
+export default function App() {
   return (
-    <div>
-      <h1>FinanceTracker Categories</h1>
-      <ul>
-        {categories.map(c => (
-          <li key={c.id}>{c.name}</li>
-        ))}
-      </ul>
+    <div style={{ maxWidth: 960, margin: "0 auto", padding: 16 }}>
+      {/* Navigation for main page */}
+      <nav style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+        <NavLink to="/">Dashboard</NavLink>
+        <NavLink to="/categories">Categories</NavLink>
+        <NavLink to="/transactions">Transactions</NavLink>
+      </nav>
+
+      {/* Route-definitions */}
+      <Routes>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/transactions" element={<TransactionsPage />} />
+      </Routes>
     </div>
   );
 }
-
-export default App
