@@ -1,16 +1,11 @@
 import { NavLink, Routes, Route } from "react-router-dom";
 import './App.css'
 
+import CategoriesPage from "./pages/CategoriesPage";
+import TransactionsPage from "./pages/TransactionsPage";
+
 function DashboardPage() {
   return <h1>Dashboard</h1>;
-}
-
-function CategoriesPage() {
-  return <h1>Categories (CRUD)</h1>;
-}
-
-function TransactionsPage() {
-  return <h1>Transactions (CRUD)</h1>;
 }
 
 /**
