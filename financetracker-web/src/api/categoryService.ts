@@ -1,6 +1,11 @@
 // src/api/categoryService.ts
 import { api } from './http'; 
 
+// encapsulates HTTP calls related to categories -> Transport layer
+// * builds the URL
+// * puts together Header/Body
+// * returns promise with typed response
+
 export interface Category {
   id: number;
   name: string; 

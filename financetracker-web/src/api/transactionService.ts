@@ -48,18 +48,18 @@ export function getTransactionById(id: number) {
 }
 
 // Create()
-export function createTransaction(Transaction: TransactionCreate) {
+export function createTransaction(transaction: TransactionCreate) {
     return api<Transaction>('/api/transactions', {
         method: 'POST',
-        body: JSON.stringify(Transaction),
+        body: JSON.stringify(transaction),
     });
 }
 
 // Update() -> void, because backend returns no content
-export function updateTransaction(id: number, Transaction: TransactionUpdate) {
+export function updateTransaction(id: number, transaction: TransactionUpdate) {
     return api<void>(`/api/transactions/${id}`, {
         method: "PUT",
-        body: JSON.stringify(Transaction),
+        body: JSON.stringify(transaction),
     });
 }
 
