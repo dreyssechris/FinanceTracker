@@ -30,12 +30,32 @@ export function useCategories() {
         }
     })
 
+
+    // DELETE – Optimistic remove + Rollback + Refetch
     const remove = useMutation({
         mutationFn: (id: number) => deleteCategory(id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['categories']});
+
+        onMutate: async (id: number) => {
+            await queryClient.cancelQueries({ queryKey: ['categories'] });
+            const previous = queryClient.getQueryData<Category[]>(['categories']);
+
+        queryClient.setQueryData<Category[]>(['categories'], (old) =>
+            old ? old.filter((c) => c.id !== id) : old
+        );
+
+        return { previous };
+        },
+
+        onError: (_err, _id, ctx) => {
+        if (ctx?.previous) {
+            queryClient.setQueryData(['categories'], ctx.previous);
         }
-    })
+        },
+
+        onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ['categories'], refetchType: 'active' });
+        },
+    });
 
     return { list, selectById, create, update, remove };
 }

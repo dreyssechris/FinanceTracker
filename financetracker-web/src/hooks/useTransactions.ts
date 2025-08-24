@@ -5,6 +5,7 @@ import {
     createTransaction,
     updateTransaction,
     deleteTransaction,
+    type Transaction,
     type TransactionCreate,
     type TransactionUpdate,
 } from '../api/transactionService';
@@ -47,12 +48,42 @@ export function useTransactions() {
         }
     })
 
-    const remove = useMutation({
-        mutationFn: (id: number) => deleteTransaction(id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['transactions']});
-        }
-    })
+  const remove = useMutation({
+    mutationFn: (id: number) => deleteTransaction(id),
+
+    // 1) Optimistic Update
+    onMutate: async (id: number) => {
+      // laufende Loads stoppen -> kein Race
+      await queryClient.cancelQueries({ queryKey: ['transactions'] });
+
+      // alten Zustand merken (für Rollback)
+      const previous = queryClient.getQueryData<Transaction[]>(['transactions']);
+
+      // sofort aus der Liste entfernen
+      queryClient.setQueryData<Transaction[]>(['transactions'], (old) =>
+        old ? old.filter(t => t.id !== id) : old
+      );
+
+      // Kontext für onError
+      return { previous };
+    },
+
+    // 2) Rollback bei Fehler
+    onError: (_err, _id, ctx) => {
+      if (ctx?.previous) {
+        queryClient.setQueryData(['transactions'], ctx.previous);
+      }
+    },
+
+    // 3) Egal was passiert -> echten Serverstand nachziehen
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'active' });
+
+      // Falls du abgeleitete Daten hast (Summen/Charts/etc.), hier zusätzlich invalidieren:
+      // queryClient.invalidateQueries({ queryKey: ['stats'] });
+      // queryClient.invalidateQueries({ queryKey: ['balance'] });
+    },
+  });
 
     return { list, byId, create, update, remove };
 }
