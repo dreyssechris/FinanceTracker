@@ -1,0 +1,48 @@
+/* src/pages/TransactionsPage.module.scss */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.title {
+  margin: 0 0 16px;
+}
+
+.section {
+  margin-top: 16px;
+}
+
+.subtitle {
+  margin: 0 0 8px;
+}
+
+.state {
+  padding: 16px;
+}
+
+.stateError {
+  color: #b91c1c;
+}
+
+.toolbar {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.iconBtn {
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}

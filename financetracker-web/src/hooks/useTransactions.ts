@@ -5,10 +5,8 @@ import {
     createTransaction,
     updateTransaction,
     deleteTransaction,
-    type Transaction,
-    type TransactionCreate,
-    type TransactionUpdate,
 } from '../api/transactionService';
+import type { Transaction, TransactionCreate, TransactionUpdate } from '../contracts/transactions';
 
 /**
  * React Query hook for transactions.

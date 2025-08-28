@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'; 
-import { getCategories, createCategory, updateCategory, deleteCategory, type Category } from '../api/categoryService';
+import { getCategories, createCategory, updateCategory, deleteCategory } from '../api/categoryService';
+import type { Category } from '../contracts/categories';
 
 export function useCategories() {
     const queryClient = useQueryClient();
@@ -29,7 +30,6 @@ export function useCategories() {
             queryClient.invalidateQueries({ queryKey: ['categories']}); 
         }
     })
-
 
     // DELETE – Optimistic remove + Rollback + Refetch
     const remove = useMutation({

@@ -1,0 +1,68 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.iconCell { width: 28px; }
+
+.icon {
+  width: 20px;
+  height: 20px;
+  opacity: 1;
+}
+
+/* Typ-Farben über Row-Klasse steuern */
+.type-income .icon {
+  color: #85bb65;
+}
+
+.type-expense .icon {
+  color: #b96565;
+}  
+
+.type-investment .icon {
+  color: #6380bf; 
+}
+
+.viewBtn {
+  color: #85bb65; 
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.editBtn {
+  color: #6380bf; 
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.deleteBtn {
+  color: #b96565; 
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Screenreader-only Text für den Icon-Header */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

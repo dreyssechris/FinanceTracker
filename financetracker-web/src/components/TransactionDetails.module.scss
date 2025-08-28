@@ -1,0 +1,16 @@
+/* src/components/TransactionDetails.module.scss */
+
+.grid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px 12px;
+}
+
+dt {
+  color: #6b7280; /* subtle label color */
+}
+
+dd {
+  margin: 0;
+  word-break: break-word;
+}

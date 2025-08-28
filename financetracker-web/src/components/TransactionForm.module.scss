@@ -1,0 +1,42 @@
+/* src/components/TransactionForm.module.scss */
+
+.form {
+  display: grid;
+  gap: 10px;
+  max-width: 520px;
+}
+
+.label {
+  display: grid;
+  gap: 6px;
+}
+
+.input, .select {
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.btnPrimary {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+}
