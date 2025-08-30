@@ -3,6 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# --- OS / IDE ---
+**/.DS_Store
+**/Thumbs.db
+**/.idea/
+**/.vs/
+**/.vscode/
+
 # User-specific files
 *.rsuser
 *.suo
@@ -416,3 +423,25 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# .NET
+FinanceTracker.Api/bin/
+FinanceTracker.Api/obj/
+*.user
+*.suo
+
+# Node/Vite (Frontend)
+financetracker-web/node_modules/
+financetracker-web/dist/
+financetracker-web/.vite/
+financetracker-web/coverage/
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# ASP.NET local configs (nicht ins Repo)
+FinanceTracker.Api/appsettings.Development.json
+FinanceTracker.Api/appsettings.*.Local.json

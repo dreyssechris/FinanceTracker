@@ -1,0 +1,64 @@
+// tokens without _, because we want them compiled to CSS variables
+// @use is newer version of @import (which is now deprecated) in Sass
+// as * -> all exported vars/mixins/functions are available without prefix -> global namespace -> werden "end-namepsaced"
+@use "./tokens" as *; /* if you split, or just rely on current folder resolution */
+
+/* Media helpers */
+// Usage: @include up($bp-md) { ... } or @include down($bp-sm) { ... }
+// up: until min-width (inclusive)
+// down: until max-width (inclusive)
+// content: is a special directive that represents the nested block where the mixin is included
+@mixin up($w) { 
+    @media (min-width: $w) { 
+        @content; 
+    }  // content is Sass and represents the nested block where the mixin is included
+}
+@mixin down($w) { 
+    @media (max-width: $w) {
+         @content; 
+    } 
+}
+
+// Focus ring for accessibility (e.g. on buttons, inputs, links)
+// Usage: @include focus-ring;
+@mixin focus-ring { 
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.button {
+  &:focus-visible { @include focus-ring; } // include means "call this mixin here", only included when :focus-visible applies
+}
+
+/* Visually hidden text (for a11y, like your srOnly usage) */
+// later..
+@mixin sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+.table .srOnly {
+  // Keep column heading accessible when the visual header is hidden on mobile.
+  @include sr-only;
+}
+
+/* Card look used by mobile "table rows" and general surfaces */
+// Smaller screens often have less space, so we make each row look like a card and therefore look the same as other cards in the app.
+@mixin card { // consistent look for isolated content blocks
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+.transactionRow {
+  // Make each row look like a card on small screens.
+  @include card;
+
+  // Add spacing specific to this component:
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}

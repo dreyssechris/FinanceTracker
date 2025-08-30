@@ -1,0 +1,75 @@
+@use "./mixins" as *; /* makes mixins like focus-ring and sr-only available */
+@use "./tokens" as *; /* makes design tokens available as CSS variables and SCSS variables */
+
+/* Minimal reset + base styles for consistent rendering */
+*, *::before, *::after { 
+    box-sizing: border-box; 
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-base); 
+  line-height: 1.4;
+  font-synthesis: none; /* Prevent faux bold/italic */
+}
+
+/* anchor/button basics */
+a {
+  color: var(--primary); text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline; 
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+button:focus-visible { 
+  @include focus-ring; 
+}
+
+/* global utility */
+.container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--container-max);
+  padding-inline: var(--space-4);
+}
+
+/* screen-reader-only helper */
+.srOnly { 
+  @include sr-only; 
+}
+
+:root {
+  /* English: fallback chain remains for robustness */
+  --app-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+body {
+  font-family: var(--app-font-mono);
+  /* English: avoid fake bold/italic since we only ship regular */
+  font-synthesis: none;
+}

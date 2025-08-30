@@ -83,5 +83,5 @@ export function useTransactions() {
     },
   });
 
-    return { list, byId, create, update, remove };
+  return { list, byId, create, update, remove };
 }

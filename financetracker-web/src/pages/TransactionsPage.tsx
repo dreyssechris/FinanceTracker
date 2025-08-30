@@ -59,6 +59,12 @@ export default function TransactionsPage() {
   // NEW: single source of truth for which modal to show (or none)
   const [modal, setModal] = useState<ModalState>({ kind: "closed" });
 
+  // Items to render in the list.
+  //     useMemo is optional here, but shows the pattern:
+  //     if later you sort or filter, you won’t recompute unless `list.data` changes.
+  //     Call hook before something is returned!
+  const items = useMemo(() => list.data ?? [], [list.data]);
+
   if (list.isLoading) {
     return (
       <div className={styles.state}>
@@ -74,11 +80,6 @@ export default function TransactionsPage() {
       </div>
     );
   }
-
-  // Items to render in the list.
-  //     useMemo is optional here, but shows the pattern:
-  //     if later you sort or filter, you won’t recompute unless `list.data` changes.
-  const items = useMemo(() => list.data ?? [], [list.data]);
 
   // Set a proper title per modal kind (nice for a11y and clarity)
   const modalTitle =
@@ -106,7 +107,7 @@ export default function TransactionsPage() {
             onDelete: when the user clicks Delete, we directly call remove.mutate(id)
       */}
       <TransactionList // Callback not inside List, because List is dumb/presentational
-        items={list.data ?? []}
+        items={items}
         onView={(t) => setModal({ kind: "view", tx: t })}
         onEdit={(t) => setModal({ kind: "edit", tx: t })}
         onDelete={(id) => remove.mutate(id)}

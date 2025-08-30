@@ -7,6 +7,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Editor
+.DS_Store
+.idea/
+.vscode/
+
 node_modules
 dist
 dist-ssr
