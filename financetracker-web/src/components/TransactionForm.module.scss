@@ -1,42 +1,54 @@
-/* src/components/TransactionForm.module.scss */
+@use "../styles/_mixins.scss" as *;
+@use "../styles/_tokens.scss" as *;
 
 .form {
   display: grid;
-  gap: 10px;
-  max-width: 520px;
+  gap: var(--space-4);
+
+  /* At medium+ screens, arrange fields into two columns automatically. */
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .label {
   display: grid;
-  gap: 6px;
+  gap: var(--space-2);
+  color: var(--muted);
 }
 
 .input, .select {
-  padding: 8px 10px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  font: inherit;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+}
+.input:focus-visible, .select:focus-visible { @include focus-ring; }
+
+/* Make the description stretch full width even on large screens. */
+.label:nth-last-child(2) { /* "Description" label (assuming order from your component) */
+  @include up($bp-md) { grid-column: 1 / -1; }
 }
 
 .actions {
   display: flex;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.btn {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  background: #f8fafc;
-  cursor: pointer;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  @include up($bp-md) { grid-column: 1 / -1; }
 }
 
 .btnPrimary {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #2563eb;
-  background: #2563eb;
+  background: var(--primary);
   color: #fff;
-  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+}
+.btn {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
 }

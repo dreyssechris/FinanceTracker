@@ -32,7 +32,9 @@ export default function TransactionList({ items, onView, onEdit ,onDelete }: Pro
             <th scope="col">Type</th>
             <th scope="col">Amount</th>
             <th scope="col">Category</th>
-            <th></th>
+            <th aria-label="Actions" />
+            <th />
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -53,9 +55,10 @@ export default function TransactionList({ items, onView, onEdit ,onDelete }: Pro
 
             return (
               <tr key={t.id} className={styles[rowIconTypeClass]}> {/* Apply specific class */}
-                <td className={styles.iconCell}>
-                  <TypeIcon className={styles.icon} aria-hidden/>
-                </td >
+                {/* On mobile, the icon cell will visually act as a left stripe/icon. */}
+                <td className={styles.iconCell} data-label=" ">
+                  <TypeIcon className={styles.icon} aria-hidden />
+                </td>
                 <td>{format(parseISO(t.date), "yyyy-MM-dd")}</td>
                 <td>{t.title}</td>
                 <td>{t.type}</td>

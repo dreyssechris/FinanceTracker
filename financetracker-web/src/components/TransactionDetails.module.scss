@@ -1,16 +1,25 @@
-/* src/components/TransactionDetails.module.scss */
+@use "../styles/_mixins.scss" as *;
+@use "../styles/_tokens.scss" as *;
 
 .grid {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 8px 12px;
-}
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
 
-dt {
-  color: #6b7280; /* subtle label color */
-}
+  dt {
+    color: var(--muted);
+  }
+  dd {
+    margin: 0 0 var(--space-2);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px dashed rgba(255,255,255,.08);
+  }
 
-dd {
-  margin: 0;
-  word-break: break-word;
+  @include up($bp-md) {
+    /* two-column label/value pairs */
+    grid-template-columns: 200px 1fr;
+    dt, dd { border-bottom: none; }
+    dt { align-self: center; }
+    dd { margin: 0; padding: 0; }
+  }
 }

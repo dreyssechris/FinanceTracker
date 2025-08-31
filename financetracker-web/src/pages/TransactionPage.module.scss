@@ -1,45 +1,62 @@
+@use '../styles/mixins' as *; // import all mixins/vars/functions from _mixins.scss
+@use '../styles/tokens' as *; // import all tokens/vars/functions from _tokens.scss
+
 /* src/pages/TransactionsPage.module.scss */
 .container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 16px;
+  @extend .container; // use global container utility
+  padding-block: var(--space-6); 
 }
 
+/* page title - clamp makes it responsive */
 .title {
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-4);
+  font-size: clamp(1.25rem, 1.4vw + 1rem, 2rem);
+  font-weight: 600;
 }
 
-.section {
-  margin-top: 16px;
-}
-
-.subtitle {
-  margin: 0 0 8px;
-}
-
+/* state boxes (loading/error) */
 .state {
-  padding: 16px;
+  padding: var(--space-6);
+  text-align: center;
+  @include card;
 }
 
 .stateError {
-  color: #b91c1c;
+  color: var(--danger);
 }
 
+/* toolbar under the table */
 .toolbar {
-  margin-top: 12px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  margin-top: var(--space-4);
+
+  /* On small screens, keep the add button easy to reach (sticky at center) */
+  @include down($bp-md) {
+    position: sticky;
+    bottom: var(--space-4);
+    /* create right alignment within flow */
+    justify-content: center;
+    z-index: 10;
+  }
 }
 
+/* circular icon button */
 .iconBtn {
-  border: 1px solid #e5e7eb;
-  background: #f8fafc;
-  border-radius: 8px;
-  padding: 6px 10px;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+}
+.iconBtn:focus-visible { 
+  @include focus-ring; 
 }
 
 .icon {

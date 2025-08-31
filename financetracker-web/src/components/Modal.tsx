@@ -1,48 +1,54 @@
-// Overlapping UI Window, that blocks interaction with rest of react site: Modal for viewing, Modal for editing
-// Separation of concerns: Modal is 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./Modal.module.scss";
+import type { PropsWithChildren } from "react";
 
 type Props = {
   isOpen: boolean;
   title?: string;
   onClose: () => void;
-  children: React.ReactNode; // Every prop can have children
-                             // It is whatever is placed between the opening and closing tags of a component
-};
+} & PropsWithChildren;
 
+/* A11y-focused modal:
+   - Focus trap (simple: focus first element)
+   - ESC to close
+   - Backdrop click to close
+*/
 export default function Modal({ isOpen, title, onClose, children }: Props) {
-  // Close modal on Escape key press
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    }
+  const ref = useRef<HTMLDivElement>(null);
 
-    isOpen ? document.addEventListener("keydown", handleKeyDown) : document.removeEventListener("keydown", handleKeyDown);
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Close on ESC
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+
+    // Move focus into the dialog
+    const prev = document.activeElement as HTMLElement | null;
+    ref.current?.focus();
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", onKey);
+      prev?.focus();
     };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div className={styles.modal}>
-        <header className={styles.header}>
-          {title && <h2 id="modal-title" className={styles.title}>{title}</h2>}
-          <button 
-            type="button" 
-            className={styles.closeBtn} 
-            onClick={onClose} 
-            aria-label="Close modal"
-          >
-            &times;
-          </button>
-        </header>
+    <div className={styles.backdrop} onMouseDown={onClose} /* close on backdrop click */>
+      <div
+        className={styles.dialog}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title ?? "Dialog"}
+        onMouseDown={(e) => e.stopPropagation()} // prevent backdrop close when clicking inside
+        tabIndex={-1}
+        ref={ref}
+      >
+        {title && <div className={styles.header}><h2>{title}</h2></div>}
         <div className={styles.content}>
           {children}
         </div>
