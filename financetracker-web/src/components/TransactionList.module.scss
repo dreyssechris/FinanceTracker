@@ -11,8 +11,8 @@
     text-align: left;
     font-weight: 600;
     padding: var(--space-3) var(--space-3);
-    color: var(--muted);
-    border-bottom: 1px solid rgba(255,255,255,.08);
+    color: var(--primary);
+    border-bottom: var(--border);
     position: sticky;
     top: 0;
     background: var(--bg);
@@ -21,9 +21,10 @@
 
   tbody td {
     padding: var(--space-3);
-    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-bottom: var(--border);
     vertical-align: middle;
     text-align: left;
+    color: var(--text);
   }
 
   .iconCell { width: 40px; }
@@ -31,9 +32,18 @@
 }
 
 /* Row accent by type (left border & subtle bg) */
-.type-income    { border-left: 4px solid var(--income); }
-.type-expense   { border-left: 4px solid var(--expense); }
-.type-investment{ border-left: 4px solid var(--investment); }
+.type-income    { 
+  border-left: 4px solid var(--income);
+  border-right: 1px solid var(--bordercolor);
+}
+.type-expense   { 
+  border-left: 4px solid var(--expense);
+  border-right: 1px solid var(--bordercolor);
+}
+.type-investment{
+  border-left: 4px solid var(--investment);
+  border-right: 1px solid var(--bordercolor);
+}
 
 /* ACTION buttons */
 .viewBtn, .editBtn, .deleteBtn {
@@ -49,46 +59,13 @@
   width: 1rem; height: 1rem; 
 }
 
+.deleteBtn {
+  color: var(--danger);
+}
+
 /* Accessibility helper (matches globals .srOnly; keep local too if preferred) */
 .srOnly { 
   @include sr-only;
-}
-
-/* --- MOBILE MODE: transform table rows into cards --- */
-@media (max-width: $bp-md) {
-  .table, .table thead, .table tbody, .table th, .table td, .table tr {
-     display: block; 
-  }
-
-  .table thead {
-    display: none; /* hide header on mobile; we’ll show data labels per cell */
-  }
-
-  .table tr {
-    @include card;
-    margin-bottom: var(--space-4);
-    overflow: hidden;
-  }
-
-  .table td {
-    display: grid;
-    grid-template-columns: 8rem 1fr; /* label | value */
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-4);
-    border: none; /* card already has border */
-  }
-
-  .table td::before {
-    /* Show a label based on data-label attr (e.g., "Date", "Title") */
-    content: attr(data-label);
-    color: var(--muted);
-    font-weight: 500;
-  }
-
-  /* icon cell: compress label column */
-  .iconCell {
-    grid-template-columns: 1.5rem 1fr;
-  }
 }
 
 .type-income .icon {
@@ -101,4 +78,12 @@
 
 .type-investment .icon {
   color: var(--investment); 
+}
+
+/* --- MOBILE MODE: transform table so it only has 5 rows and fits on mobile screens --- */
+@include down($bp-md) {
+
+  .hideOnMobile { 
+    display: none; // hide columns that dont' fit on small screens
+  }
 }

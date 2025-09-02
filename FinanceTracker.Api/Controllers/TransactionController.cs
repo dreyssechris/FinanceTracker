@@ -3,12 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using FinanceTracker.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using FinanceTracker.Api.Dtos;
+using FinanceTracker.Api.Services;
 
 namespace FinanceTracker.Api.Controllers
 {
     [ApiController]
     [Route("api/transactions")]
-    public class TransactionsController(AppDbContext context) : ControllerBase
+    public class TransactionsController(
+        AppDbContext context,
+        ITransactionQueries queries
+        ) : ControllerBase
     {
         private readonly AppDbContext _context = context;
 
@@ -28,11 +32,8 @@ namespace FinanceTracker.Api.Controllers
         // GET /api/transactions
         [HttpGet]
         // Enumerable because its a list
-        public ActionResult<IEnumerable<TransactionReadDto>> GetAll()
-        {
-            var items = ProjectToReadDto(_context.Transactions.AsNoTracking()).ToList();
-            return Ok(items);
-        }
+        public async Task<ActionResult<IEnumerable<TransactionReadDto>>> GetAll(CancellationToken ct) =>
+            Ok(await queries.GetAllNewestFirstAsync(ct));
 
         // GET /api/transactions/{id}
         [HttpGet("{id:int}")]

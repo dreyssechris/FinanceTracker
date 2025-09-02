@@ -29,7 +29,8 @@
 .toolbar {
   display: flex;
   justify-content: center;
-  margin-top: var(--space-4);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-6);
 
   /* On small screens, keep the add button easy to reach (sticky at center) */
   @include down($bp-md) {
@@ -49,9 +50,8 @@
   height: 3rem;
   width: 3rem;
   border-radius: 999px;
-  border: none;
-  background: var(--primary);
-  color: #fff;
+  background: var(--background);
+  color: var(--muted);
   box-shadow: var(--shadow-1);
   cursor: pointer;
 }

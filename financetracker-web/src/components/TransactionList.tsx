@@ -27,11 +27,11 @@ export default function TransactionList({ items, onView, onEdit ,onDelete }: Pro
             <th className={styles.iconCell} scope="col" >
               <span className={styles.srOnly}>Type icon</span> {/* Screen reader only text for accessibility */}  
             </th>
-            <th scope="col">Date</th>
-            <th scope="col">Title</th>
-            <th scope="col">Type</th>
+            <th className={styles.hideOnMobile} scope="col">Date</th>
+            <th className={styles.hideOnMobile} scope="col">Title</th>
+            <th className={styles.hideOnMobile} scope="col">Type</th>
             <th scope="col">Amount</th>
-            <th scope="col">Category</th>
+            <th className={styles.hideOnMobile} scope="col">Category</th>
             <th aria-label="Actions" />
             <th />
             <th />
@@ -59,11 +59,11 @@ export default function TransactionList({ items, onView, onEdit ,onDelete }: Pro
                 <td className={styles.iconCell} data-label=" ">
                   <TypeIcon className={styles.icon} aria-hidden />
                 </td>
-                <td>{format(parseISO(t.date), "yyyy-MM-dd")}</td>
-                <td>{t.title}</td>
-                <td>{t.type}</td>
+                <td className={styles.hideOnMobile} >{format(parseISO(t.date), "yyyy-MM-dd")}</td>
+                <td className={styles.hideOnMobile} >{t.title}</td>
+                <td className={styles.hideOnMobile} >{t.type}</td>
                 <td>{t.amount.toFixed(2)}{"€"}</td>
-                <td>{cat?.name ?? t.categoryId}</td>
+                <td className={styles.hideOnMobile} >{cat?.name ?? t.categoryId}</td>
                 <td>
                   <button 
                     title="View"

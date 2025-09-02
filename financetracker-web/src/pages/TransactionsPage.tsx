@@ -9,7 +9,7 @@ import TransactionForm from "../components/TransactionForm";
 import TransactionDetails from "../components/TransactionDetails";
 import Modal from "../components/Modal";
 import styles from "./TransactionPage.module.scss";
-import { PlusCircle } from "lucide-react";
+import { Plus } from "lucide-react";
 
 // Using `import type` guarantees these types do not end up in the JS bundle.
 import type { 
@@ -95,6 +95,19 @@ export default function TransactionsPage() {
     <div className={styles.container}>
       <h1 className={styles.title}>Ledger</h1>
 
+      {/* NEW: Toolbar under the table with a single icon button to open CREATE modal */}
+      <div className={styles.toolbar}>
+        <button
+          type="button"
+          className={styles.iconBtn}
+          onClick={() => setModal({ kind: "create" })}
+          aria-label="Add new transaction"
+          title="Add transaction"
+        >
+          <Plus className={styles.icon} aria-hidden />
+        </button>
+      </div>
+
       {/*
         The TransactionList is *presentational*:
             - It RECEIVES data via props.
@@ -113,25 +126,14 @@ export default function TransactionsPage() {
         onDelete={(id) => remove.mutate(id)}
       />
 
-      {/* NEW: Toolbar under the table with a single icon button to open CREATE modal */}
-      <div className={styles.toolbar}>
-        <button
-          type="button"
-          className={styles.iconBtn}
-          onClick={() => setModal({ kind: "create" })}
-          aria-label="Add new transaction"
-          title="Add transaction"
-        >
-          <PlusCircle className={styles.icon} aria-hidden />
-        </button>
-      </div>
-
       {/* ONE REUSABLE MODAL FOR ALL MODES.
           We drive it from `modal.kind` and render different children */}
       <Modal
         isOpen={modal.kind !== "closed"}
         title={modalTitle}
-        onClose={() => setModal({ kind: "closed" })}
+        onClose={() => setModal({ 
+          kind: "closed" 
+        })}
       >
       {/* VIEW CONTENT */}
         {modal.kind === "view" && <TransactionDetails tx={modal.tx} />}
@@ -152,7 +154,10 @@ export default function TransactionsPage() {
             onSubmit={(values: TransactionUpdate) =>
               update.mutate(
                 { id: modal.tx.id, payload: values },
-                { onSuccess: () => setModal({ kind: "closed" }) }
+                { onSuccess: () => setModal({ 
+                  kind: "closed" 
+                })
+              }
               )
             }
             onCancel={() => setModal({ kind: "closed" })}
@@ -165,7 +170,11 @@ export default function TransactionsPage() {
             submitting={create.isPending}
             submitLabel="Create"
             onSubmit={(values: TransactionCreate) =>
-              create.mutate(values, { onSuccess: () => setModal({ kind: "closed" }) })
+              create.mutate(values, {
+                 onSuccess: () => setModal({
+                   kind: "closed" 
+                  }) 
+                })
             }
           />
         )}

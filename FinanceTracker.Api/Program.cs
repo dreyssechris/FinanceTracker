@@ -1,4 +1,5 @@
 using FinanceTracker.Api.Data;
+using FinanceTracker.Api.Services;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,9 @@ var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION")
 // DB-Kontext using SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+// For every Request once add DI for TransactionQueries
+builder.Services.AddScoped<ITransactionQueries, TransactionQueries>();
 
 // CORS for React Frontend
 builder.Services.AddCors(options =>

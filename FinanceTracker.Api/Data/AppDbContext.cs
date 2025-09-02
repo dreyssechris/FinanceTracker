@@ -25,7 +25,7 @@ public class AppDbContext : DbContext
             .HasOne(t => t.Category)
             .WithMany(c => c.Transactions)
             .HasForeignKey(t => t.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict) // if tryed to delete a parent (category), with min 1 child a error is thrown ( FOREIGN KEY constraint violation)
+            .OnDelete(DeleteBehavior.Restrict) // if tryed to delete a parent (category), with min 1 child error is thrown ( FOREIGN KEY constraint violation)
             .IsRequired();
 
         // Category Constraints
@@ -43,5 +43,9 @@ public class AppDbContext : DbContext
         );
 
         base.OnModelCreating(modelBuilder);
+        
+        // Indexes for better Sort/Query
+        modelBuilder.Entity<Transaction>().HasIndex(t => t.Date);
+        modelBuilder.Entity<Transaction>().HasIndex(t => new { t.Date, t.Id }); // more stable sorting
     }
 }
