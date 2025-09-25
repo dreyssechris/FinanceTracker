@@ -1,6 +1,16 @@
 @use "./mixins" as *; /* makes mixins like focus-ring and sr-only available */
 @use "./tokens" as *; /* makes design tokens available as CSS variables and SCSS variables */
 
+:root {
+  color-scheme: light dark;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+    /* fallback chain for robustness */
+  --app-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+}
+
 /* Minimal reset + base styles for consistent rendering */
 *, *::before, *::after { 
     box-sizing: border-box; 
@@ -29,10 +39,11 @@ body {
 
 /* anchor/button basics */
 a {
-  color: var(--primary); text-decoration: none;
+  color: var(--muted); text-decoration: none;
 }
 
 a:hover {
+  color: var(--primary-hover);
   text-decoration: underline; 
 }
 
@@ -45,6 +56,7 @@ button {
   padding: var(--space-2) var(--space-3);
   cursor: pointer;
 }
+
 
 button:focus-visible { 
   @include focus-ring; 
@@ -63,13 +75,15 @@ button:focus-visible {
   @include sr-only; 
 }
 
-:root {
-  /* English: fallback chain remains for robustness */
-  --app-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+/* Ensure form controls use the app font everywhere */
+input,
+select,
+textarea,
+button {
+  font: inherit;      /* font-family, size, line-height */
 }
 
-body {
-  font-family: var(--app-font-mono);
-  /* English: avoid fake bold/italic since we only ship regular */
-  font-synthesis: none;
-}
+/* Some UAs render option/placeholder with a default font unless forced */
+select option { font-family: inherit; }
+input::placeholder,
+textarea::placeholder { font-family: inherit; }

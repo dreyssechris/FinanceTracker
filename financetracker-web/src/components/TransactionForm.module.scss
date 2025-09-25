@@ -34,7 +34,7 @@
 .actions {
   display: flex;
   gap: var(--space-3);
-  justify-content: flex-end;
+  justify-content: center; /* default center */
   @include up($bp-md) { grid-column: 1 / -1; }
 }
 

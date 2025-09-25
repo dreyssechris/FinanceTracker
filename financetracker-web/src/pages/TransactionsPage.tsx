@@ -61,7 +61,7 @@ export default function TransactionsPage() {
 
   // Items to render in the list.
   //     useMemo is optional here, but shows the pattern:
-  //     if later you sort or filter, you won’t recompute unless `list.data` changes.
+  //     if later sorted or filtered, no need to recompute unless `list.data` changes.
   //     Call hook before something is returned!
   const items = useMemo(() => list.data ?? [], [list.data]);
 
@@ -95,7 +95,7 @@ export default function TransactionsPage() {
     <div className={styles.container}>
       <h1 className={styles.title}>Ledger</h1>
 
-      {/* NEW: Toolbar under the table with a single icon button to open CREATE modal */}
+      {/* NEW: Toolbar above the table with a single icon button to open CREATE modal */}
       <div className={styles.toolbar}>
         <button
           type="button"
@@ -127,7 +127,7 @@ export default function TransactionsPage() {
       />
 
       {/* ONE REUSABLE MODAL FOR ALL MODES.
-          We drive it from `modal.kind` and render different children */}
+          Driven from `modal.kind` and render different children */}
       <Modal
         isOpen={modal.kind !== "closed"}
         title={modalTitle}

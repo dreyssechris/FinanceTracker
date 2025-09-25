@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import CategorySelect from "./CategorySelect";
 import styles from "./TransactionForm.module.scss";
+import { NumericFormat } from "react-number-format";
 import type { TransactionCreate, TransactionType } from "../contracts/transactions";
 
 type Props = {
@@ -21,6 +22,8 @@ type Props = {
 
   // Convenience default if neither defaultValues.categoryId nor state is set
   defaultCategoryId?: number;
+
+  actionsAlign?: "start" | "center" | "end"; // NEW: control actions alignment
 };
 
 export default function TransactionForm({
@@ -33,7 +36,7 @@ export default function TransactionForm({
 }: Props) {
   // --- Local state mirrors form fields. Initialize from defaultValues (if any) ---
   const [title, setTitle] = useState(defaultValues?.title ?? "");
-  const [amount, setAmount] = useState<number>(defaultValues?.amount ?? 0);
+  const [amount, setAmount] = useState(defaultValues?.amount != null ? String(defaultValues.amount) : "");
   const [type, setType] = useState<TransactionType>(defaultValues?.type ?? "Income");
 
   // Keep date in "yyyy-MM-dd" because <input type="date"> expects that format.
@@ -52,7 +55,7 @@ export default function TransactionForm({
   useEffect(() => {
     if (!defaultValues) return;
     if (defaultValues.title !== undefined) setTitle(defaultValues.title);
-    if (defaultValues.amount !== undefined) setAmount(defaultValues.amount);
+    if (defaultValues.amount !== undefined) setAmount(String(defaultValues.amount));
     if (defaultValues.type !== undefined) setType(defaultValues.type);
     if (defaultValues.date !== undefined) setDate(defaultValues.date); // "yyyy-MM-dd"
     if (defaultValues.categoryId !== undefined) setCategoryId(defaultValues.categoryId);
@@ -60,7 +63,7 @@ export default function TransactionForm({
   }, [defaultValues]);
 
   // Submit handler: emit a *complete* TransactionCreate payload.
-  // For Update (Partial<…>) this is fine — a full object fits the Partial type.
+  // For Update (Partial<…>) this is fine, a full object fits the Partial type.
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
@@ -80,7 +83,7 @@ export default function TransactionForm({
     // - In edit flow (onCancel exists): do not reset here; modal will close on success.
     if (!onCancel) {
       setTitle("");
-      setAmount(0);
+      setAmount("");
       setDescription("");
       setType("Income");
       setDate(new Date().toISOString().slice(0, 10));
@@ -98,6 +101,8 @@ export default function TransactionForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          onInput={(e) => e.currentTarget.setCustomValidity("")}
+          onInvalid={(e) => e.currentTarget.setCustomValidity("Fill in a title.")}
           disabled={submitting}
           placeholder="Title"
         />
@@ -105,15 +110,23 @@ export default function TransactionForm({
 
       <label className={styles.label}>
         <span>Amount</span>
-        <input
+        <NumericFormat
           className={styles.input}
-          type="number"
-          step="0.01"
-          value={Number.isFinite(amount) ? amount : 0}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          value={amount}
+          thousandSeparator="."
+          decimalSeparator=","
+          decimalScale={2}
+          fixedDecimalScale
+          allowNegative={false}
+          placeholder="0,00"
+          prefix="€ "
+          onValueChange={(values) => {
+            setAmount(values.value);
+          }}
           required
+          onInput={(e) => e.currentTarget.setCustomValidity("")}
+          onInvalid={(e) => e.currentTarget.setCustomValidity("Fill in a Amount.")}
           disabled={submitting}
-          placeholder="0.00"
         />
       </label>
 
@@ -143,10 +156,15 @@ export default function TransactionForm({
         />
       </label>
 
-      {/* NOTE: If your CategorySelect doesn't accept `disabled`, remove that prop. */}
+      {/* NOTE:  */}
       <label className={styles.label}>
         <span>Category</span>
-        <CategorySelect value={categoryId} onChange={setCategoryId} /* disabled={submitting} */ />
+        <CategorySelect
+          className={styles.select}
+          disabled={submitting}
+          value={categoryId}
+          onChange={setCategoryId}
+        />
       </label>
 
       <label className={styles.label}>
@@ -156,7 +174,7 @@ export default function TransactionForm({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={submitting}
-          placeholder="Optional"
+          placeholder="Description"
         />
       </label>
 

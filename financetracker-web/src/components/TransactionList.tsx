@@ -87,10 +87,10 @@ export default function TransactionList({ items, onView, onEdit ,onDelete }: Pro
                   </button>
                 </td>
                 <td>
-                  <button 
+                  <button
                     title="Delete"
                     type="button"
-                    className={styles.deleteBtn} 
+                    className={styles.deleteBtn}
                     aria-label={`Delete transaction ${t.title}`}
                     onClick={() => onDelete(t.id)}
                   >
