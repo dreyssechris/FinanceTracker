@@ -8,6 +8,8 @@ import TransactionList from "../components/TransactionList";
 import TransactionForm from "../components/TransactionForm";
 import TransactionDetails from "../components/TransactionDetails";
 import Modal from "../components/Modal";
+import MonthPicker from "../components/MonthPicker";
+import { useMonth, filterTransactionByMonth, totalsByType } from "../hooks/useMonth"; 
 import styles from "./TransactionPage.module.scss";
 import { Plus } from "lucide-react";
 
@@ -59,12 +61,35 @@ export default function TransactionsPage() {
   // NEW: single source of truth for which modal to show (or none)
   const [modal, setModal] = useState<ModalState>({ kind: "closed" });
 
+  // --- Month state (your simple hook with local time) ---
+  const now = new Date();
+
+  const { year, month, previousMonth, nextMonth, setMonth } = useMonth(
+    now.getFullYear(),
+    now.getMonth()
+  );
+
   // Items to render in the list.
   //     useMemo is optional here, but shows the pattern:
   //     if later sorted or filtered, no need to recompute unless `list.data` changes.
   //     Call hook before something is returned!
-  const items = useMemo(() => list.data ?? [], [list.data]);
+  const allTransactions = useMemo(
+    () => list.data ?? [], [list.data]
+  );
 
+  const monthTransactions = useMemo(
+    () => filterTransactionByMonth(allTransactions, year, month),
+    [allTransactions, year, month] // recompute only if these change
+  );
+
+  const { income, expense, investment, netCashFlow } = useMemo(
+    () => totalsByType(monthTransactions), [monthTransactions]
+  );
+
+  const eur = useMemo(
+    () => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }), []
+  );
+  
   if (list.isLoading) {
     return (
       <div className={styles.state}>
@@ -94,6 +119,17 @@ export default function TransactionsPage() {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Ledger</h1>
+      
+      {/* --- Month Picker above the list --- */}
+      <div className={styles.monthBar}>
+        <MonthPicker
+          year={year}
+          month={month}
+          onPrevious={previousMonth}
+          onNext={nextMonth}
+          onMonthChange={setMonth}
+        />
+      </div>
 
       {/* NEW: Toolbar above the table with a single icon button to open CREATE modal */}
       <div className={styles.toolbar}>
@@ -106,6 +142,21 @@ export default function TransactionsPage() {
         >
           <Plus className={styles.icon} aria-hidden />
         </button>
+        {/* NEW: Monats-Summen */}
+        <div className={styles.summary}>
+          <div className={`${styles.card} ${styles.income}`}>
+            {eur.format(income)}
+          </div>
+          <div className={`${styles.card} ${styles.expense}`}>
+            {eur.format(expense)}
+          </div>
+          <div className={`${styles.card} ${styles.investment}`}>
+            {eur.format(investment)}
+          </div>
+          <div className={`${styles.card} ${styles.net} ${netCashFlow >= 0 ? styles.positive : styles.negative}`}>
+            {eur.format(netCashFlow)}
+          </div>
+        </div>
       </div>
 
       {/*
@@ -120,7 +171,7 @@ export default function TransactionsPage() {
             onDelete: when the user clicks Delete, we directly call remove.mutate(id)
       */}
       <TransactionList // Callback not inside List, because List is dumb/presentational
-        items={items}
+        items={monthTransactions}
         onView={(t) => setModal({ kind: "view", tx: t })}
         onEdit={(t) => setModal({ kind: "edit", tx: t })}
         onDelete={(id) => remove.mutate(id)}

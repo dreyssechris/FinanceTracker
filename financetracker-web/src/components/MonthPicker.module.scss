@@ -1,0 +1,30 @@
+@use "../styles/_mixins.scss" as *;
+
+.wrap { 
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    gap: var(--space-2); 
+}
+
+.navigation { 
+    margin-top: var(--space-1);
+    border: none;
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.center { 
+    min-width: 180px; 
+}
+
+.select {
+    background: var(--surface-2);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    width: 100%;
+    text-align: center;
+    padding: var(--space-1);
+}
