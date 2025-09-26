@@ -12,6 +12,7 @@ import MonthPicker from "../components/MonthPicker";
 import { useMonth, filterTransactionByMonth, totalsByType } from "../hooks/useMonth"; 
 import styles from "./TransactionPage.module.scss";
 import { Plus } from "lucide-react";
+import { BanknoteX, BanknoteArrowUpIcon, PiggyBank, MessageSquareDiff} from "lucide-react";
 
 // Using `import type` guarantees these types do not end up in the JS bundle.
 import type { 
@@ -87,7 +88,7 @@ export default function TransactionsPage() {
   );
 
   const eur = useMemo(
-    () => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }), []
+    () => new Intl.NumberFormat("en-EN", { style: "currency", currency: "EUR" }), []
   );
   
   if (list.isLoading) {
@@ -142,21 +143,26 @@ export default function TransactionsPage() {
         >
           <Plus className={styles.icon} aria-hidden />
         </button>
-        {/* NEW: Monats-Summen */}
-        <div className={styles.summary}>
+        {/* Monthly sums per Type */}
+      </div>
+
+      <div className={styles.summary}>
           <div className={`${styles.card} ${styles.income}`}>
+            <BanknoteArrowUpIcon className={styles.income} aria-hidden/>
             {eur.format(income)}
           </div>
           <div className={`${styles.card} ${styles.expense}`}>
+            <BanknoteX className={styles.expense} aria-hidden/>
             {eur.format(expense)}
           </div>
           <div className={`${styles.card} ${styles.investment}`}>
+            <PiggyBank className={styles.investment} aria-hidden/>
             {eur.format(investment)}
           </div>
-          <div className={`${styles.card} ${styles.net} ${netCashFlow >= 0 ? styles.positive : styles.negative}`}>
+          <div className={`${styles.card} ${styles.cashflow} ${netCashFlow >= 0 ? styles.positive : styles.negative}`}>
+            <MessageSquareDiff className={styles.cashflow} aria-hidden/>
             {eur.format(netCashFlow)}
           </div>
-        </div>
       </div>
 
       {/*

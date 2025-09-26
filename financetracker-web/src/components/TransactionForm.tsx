@@ -4,6 +4,8 @@ import CategorySelect from "./CategorySelect";
 import styles from "./TransactionForm.module.scss";
 import { NumericFormat } from "react-number-format";
 import type { TransactionCreate, TransactionType } from "../contracts/transactions";
+import CategoryCreate from "./CategoryCreate";
+
 
 type Props = {
   // Form submission handler:
@@ -118,7 +120,7 @@ export default function TransactionForm({
           decimalScale={2}
           fixedDecimalScale
           allowNegative={false}
-          placeholder="0,00"
+          placeholder="€ 0,00"
           prefix="€ "
           onValueChange={(values) => {
             setAmount(values.value);
@@ -165,6 +167,11 @@ export default function TransactionForm({
           value={categoryId}
           onChange={setCategoryId}
         />
+      </label>
+
+      <label className={styles.label}>
+        <span>New Category</span>
+        <CategoryCreate onCreated={(id) => setCategoryId(id)} />
       </label>
 
       <label className={styles.label}>

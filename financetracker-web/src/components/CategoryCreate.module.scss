@@ -1,0 +1,46 @@
+@use "../styles/mixins" as *;
+
+/* English: wrapper for the row below the select */
+.row { margin-top: var(--space-2); }
+
+/* English: group that visually puts the button inside the input */
+.inputGroup {
+  position: relative;
+  /* width: 100%;  // uncomment if you need explicit full width */
+  --btn-w: 92px;                 /* reserve space for the button */
+  --btn-gap: 4px;                /* small gap between text and button */
+}
+
+.input {
+  width: 100%;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  /* English: make room for the inside button on the right */
+  padding-right: calc(var(--btn-w) + var(--btn-gap) + var(--space-3));
+}
+
+/* English: place the button inside, aligned to the right */
+.btnInside {
+  position: absolute;
+  top: 50%;
+  right: var(--btn-gap);
+  transform: translateY(-50%);
+  height: calc(100% - 6px);      /* keep a tiny inset so it doesn't touch borders */
+  min-width: var(--btn-w);
+  padding-inline: var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* English: error message spans full width under the group */
+.error {
+  margin-top: var(--space-1);
+  color: var(--danger);
+  font-size: .9rem;
+}

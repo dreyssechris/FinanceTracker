@@ -54,7 +54,7 @@ export function totalsByType(transactions: Transaction[]) {
         }
     }
 
-    netCashFlow = income - expense; 
+    netCashFlow = income - expense - investment; 
 
     return { income, expense, investment, netCashFlow }; 
 }

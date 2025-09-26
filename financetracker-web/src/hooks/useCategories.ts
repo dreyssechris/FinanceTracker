@@ -20,14 +20,14 @@ export function useCategories() {
     const create = useMutation({
         mutationFn: (name: string) => createCategory(name),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['categories']}); 
+            queryClient.invalidateQueries({ queryKey: ['categories']});
         }
     })
 
     const update = useMutation({
         mutationFn: ({id, name}: {id: number, name: string}) => updateCategory(id, name),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['categories']}); 
+            queryClient.invalidateQueries({ queryKey: ['categories']});
         }
     })
 
