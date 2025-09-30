@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import styles from "./Modal.module.scss";
 import type { PropsWithChildren } from "react";
+import { X } from "lucide-react";
 
 type Props = {
   isOpen: boolean;
   title?: string;
   onClose: () => void;
+  closeOnBackdrop?: boolean; // default: true
 } & PropsWithChildren;
 
 /* A11y-focused modal:
@@ -13,15 +15,22 @@ type Props = {
    - ESC to close
    - Backdrop click to close
 */
-export default function Modal({ isOpen, title, onClose, children }: Props) {
+export default function Modal({
+   isOpen,
+   title, 
+   onClose, 
+   children,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) 
+      return;
 
     // Close on ESC
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") 
+        onClose();
     };
     window.addEventListener("keydown", onKey);
 
@@ -48,6 +57,9 @@ export default function Modal({ isOpen, title, onClose, children }: Props) {
         tabIndex={-1}
         ref={ref}
       >
+        <button type="button" className={styles.closeBtn} onClick={onClose} aria-label="Close">
+          <X />
+        </button>
         {title && <div className={styles.header}><h2>{title}</h2></div>}
         <div className={styles.content}>
           {children}

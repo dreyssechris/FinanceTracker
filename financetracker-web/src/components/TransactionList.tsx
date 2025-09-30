@@ -40,13 +40,11 @@ export default function TransactionList({ items, onView, onEdit ,onDelete }: Pro
         <tbody>
           {items.map((t) => {
             const cat = selectById(t.categoryId);
-
             // Specific icons for transaction types
-            const TypeIcon = 
+            const TypeIcon =
             t.type === "Income" ? BanknoteArrowUpIcon :
             t.type === "Expense" ? BanknoteX :
               PiggyBank;
-
             // Specific row styles for transaction types - get specific class name
             const rowIconTypeClass =
               t.type === "Income" ? "type-income" :
@@ -54,21 +52,21 @@ export default function TransactionList({ items, onView, onEdit ,onDelete }: Pro
               "type-investment";
 
             return (
-              <tr key={t.id} className={styles[rowIconTypeClass]}> {/* Apply specific class */}
+              <tr key={t.id} className={styles[rowIconTypeClass]}>
                 {/* On mobile, the icon cell will visually act as a left stripe/icon. */}
-                <td className={styles.iconCell} data-label=" ">
+                <td className={styles.iconCell} data-label="">
                   <TypeIcon className={styles.icon} aria-hidden />
                 </td>
-                <td className={styles.hideOnMobile} >{format(parseISO(t.date), "yyyy-MM-dd")}</td>
-                <td className={styles.hideOnMobile} >{t.title}</td>
-                <td className={styles.hideOnMobile} >{t.type}</td>
-                <td>{t.amount.toFixed(2)}{"€"}</td>
-                <td className={styles.hideOnMobile} >{cat?.name ?? t.categoryId}</td>
+                <td className={styles.hideOnMobile}>{format(parseISO(t.date), "yyyy-MM-dd")}</td>
+                <td className={styles.hideOnMobile}>{t.title}</td>
+                <td className={styles.hideOnMobile}>{t.type}</td>
+                <td>{t.amount.toFixed(2)}€</td>
+                <td className={styles.hideOnMobile}>{cat?.name ?? t.categoryId}</td>
                 <td>
-                  <button 
+                  <button
                     title="View"
                     type="button"
-                    className={styles.viewBtn} 
+                    className={styles.viewBtn}
                     aria-label={`View transaction ${t.title}`}
                     onClick={() => onView(t)}
                   >

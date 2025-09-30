@@ -51,35 +51,31 @@ export function useTransactions() {
 
     // 1) Optimistic Update
     onMutate: async (id: number) => {
-      // laufende Loads stoppen -> kein Race
+      // stop current fetches
       await queryClient.cancelQueries({ queryKey: ['transactions'] });
 
-      // alten Zustand merken (für Rollback)
+      // remember previous value (rollback)
       const previous = queryClient.getQueryData<Transaction[]>(['transactions']);
 
-      // sofort aus der Liste entfernen
+      // remove from cache immediately
       queryClient.setQueryData<Transaction[]>(['transactions'], (old) =>
         old ? old.filter(t => t.id !== id) : old
       );
 
-      // Kontext für onError
+      // context for onError rollback
       return { previous };
     },
 
-    // 2) Rollback bei Fehler
+    // 2) If the mutation fails, use the context returned above
     onError: (_err, _id, ctx) => {
       if (ctx?.previous) {
         queryClient.setQueryData(['transactions'], ctx.previous);
       }
     },
 
-    // 3) Egal was passiert -> echten Serverstand nachziehen
+    // 3) no matter if it fails or succeeds, refetch the list
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'], refetchType: 'active' });
-
-      // Falls du abgeleitete Daten hast (Summen/Charts/etc.), hier zusätzlich invalidieren:
-      // queryClient.invalidateQueries({ queryKey: ['stats'] });
-      // queryClient.invalidateQueries({ queryKey: ['balance'] });
     },
   });
 

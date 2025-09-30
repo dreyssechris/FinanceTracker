@@ -6,7 +6,6 @@ import { NumericFormat } from "react-number-format";
 import type { TransactionCreate, TransactionType } from "../contracts/transactions";
 import CategoryCreate from "./CategoryCreate";
 
-
 type Props = {
   // Form submission handler:
   // - Create page: create.mutate(values)

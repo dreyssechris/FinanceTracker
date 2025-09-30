@@ -13,7 +13,14 @@ type Props = {
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-export default function MonthPicker({ year, month, onPrevious, onNext, onMonthChange }: Props) {
+export default function MonthPicker({ 
+  year, 
+  month, 
+  onPrevious, 
+  onNext, 
+  onMonthChange
+}: Props) {
+  
   return (
     <div className={styles.wrap} aria-label="month selection">
       <button 

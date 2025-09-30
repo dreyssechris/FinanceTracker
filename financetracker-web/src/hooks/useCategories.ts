@@ -14,7 +14,7 @@ export function useCategories() {
     // Selector from cache by id without refetching
     const selectById = (id: number): Category | undefined => {
         const data = queryClient.getQueryData<Category[]>(['categories']);
-        return data?.find(c => c.id === id); 
+        return data?.find(c => c.id === id);
     }
     
     const create = useMutation({

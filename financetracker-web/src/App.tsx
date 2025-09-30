@@ -1,12 +1,6 @@
-import { NavLink, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import './App.css'
-
-import CategoriesPage from "./pages/CategoriesPage";
 import TransactionsPage from "./pages/TransactionsPage";
-
-function DashboardPage() {
-  return <h1>Dashboard</h1>;
-}
 
 /**
  * App-Component – central entry point of frontend
@@ -20,16 +14,12 @@ export default function App() {
     <div style={{ maxWidth: 960, margin: "0 auto", padding: 16 }}>
       {/* Navigation for main page */}
       <nav style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-        <NavLink to="/">Dashboard</NavLink>
-        <NavLink to="/categories">Categories</NavLink>
-        <NavLink to="/transactions">Transactions</NavLink>
+
       </nav>
 
       {/* Route-definitions */}
       <Routes>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
-        <Route path="/transactions" element={<TransactionsPage />} />
+        <Route path="/" element={<TransactionsPage />} />
       </Routes>
     </div>
   );

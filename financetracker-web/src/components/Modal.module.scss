@@ -1,7 +1,7 @@
 @use "../styles/_mixins.scss" as *;
 @use "../styles/_tokens.scss" as *;
 
-/* Backdrop covers the screen */
+/* Backdrop in the middle of the screen and above everyting else */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -11,27 +11,36 @@
   z-index: 50;
 }
 
-/* Mobile: full height/width sheet; Desktop: centered card */
+/* centered card on mobile and desktop */
 .dialog {
+  position: relative;
   background: var(--surface);
-  width: 100%;
-  height: 100svh; /* safe viewport height for mobile browsers */
   border-radius: 0;
   overflow: auto;
+  width: min(640px, 92vw);
+  height: auto;
+  max-height: 85vh;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-4);
+}
 
-  @include up($bp-md) {
-    width: min(640px, 92vw);
-    height: auto;
-    max-height: 85vh;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-1);
-  }
+/* Button upper right corner – vertical same height as heading */
+.closeBtn {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-4);
+  text-align: center;
+  color: var(--danger);
+  cursor: pointer;
+  border: none;
 }
 
 .header {
   padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  h2 { margin: 0; font-size: 1.1rem; }
+  border-bottom: 1px solid var(--bordercolor);
+  h2 {
+    margin: 0; font-size: 1.1rem;
+  }
 }
 
 .content {
