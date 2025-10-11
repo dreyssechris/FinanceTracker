@@ -112,7 +112,6 @@ namespace FinanceTracker.Api.Controllers
             if (entity == null)
                 return NotFound();
 
-
             _context.Transactions.Remove(entity);
             _context.SaveChanges();
 
