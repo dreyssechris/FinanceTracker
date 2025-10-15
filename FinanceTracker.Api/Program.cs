@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+const string CorsPolicy = "AppCors";
+var allowedOrigin = Environment.GetEnvironmentVariable("FRONTEND_ORIGIN") 
+                    ?? "http://localhost:5173";
+
 // get the connection string
 var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION")
     ?? builder.Configuration.GetConnectionString("DefaultConnection"); // 
@@ -19,10 +23,10 @@ builder.Services.AddScoped<ITransactionQueries, TransactionQueries>();
 // CORS for React Frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy => policy.WithOrigins("http://localhost:3000")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod());
+    options.AddPolicy(CorsPolicy, policy => 
+        policy.WithOrigins(allowedOrigin)
+        .AllowAnyHeader()
+        .AllowAnyMethod());
 });
 
 builder.Services
@@ -51,7 +55,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();   // nice to have
-app.UseCors("AllowFrontend");
+app.UseCors(CorsPolicy);
 app.UseAuthorization();
 
 app.MapControllers();
