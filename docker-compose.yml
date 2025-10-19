@@ -70,7 +70,7 @@ services:
       - "8080:80"         # Dev-Starting: http://<PI-IP>:8080/financetracker
       # - "8443:443"      # For Future Dev HTTPS
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy:/etc/caddy:ro
       - caddy-data:/data
       - caddy-config:/config
     depends_on:
