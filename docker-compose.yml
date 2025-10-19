@@ -41,7 +41,7 @@ services:
     command: sh -c "npm ci && npm run dev -- --host"
     restart: unless-stopped
     ports:
-      - "5173:5173"
+      - "${WEB_PORT}:5173"
     environment:
       # Browser calls API using this URL (Dev)
       VITE_API_BASE_URL: ${FRONTEND_API_BASE}
