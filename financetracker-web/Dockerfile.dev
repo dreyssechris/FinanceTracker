@@ -1,0 +1,21 @@
+# Use a small Node image
+FROM node:20-alpine
+
+# Workdir inside the container
+WORKDIR /app
+
+# 1) Copy only manifests first to leverage Docker layer cache
+#    IMPORTANT: Make sure package-lock.json is committed.
+COPY package*.json ./
+
+# 2) Install dependencies (reproducible installs)
+RUN npm ci
+
+# 3) Copy the rest of the project
+COPY . .
+
+# 4) Expose Vite dev port
+EXPOSE 5173
+
+# 5) Start Vite in dev mode, bind to 0.0.0.0 so it's reachable from outside
+CMD ["npm", "run", "dev", "--", "--host"]
