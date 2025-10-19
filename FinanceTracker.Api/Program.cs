@@ -6,12 +6,15 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 const string CorsPolicy = "AppCors";
-var allowedOrigin = Environment.GetEnvironmentVariable("FRONTEND_ORIGIN") 
-                    ?? "http://localhost:5173";
+// multiple Origins via ENV, separated by comma:
+// FRONTEND_ORIGIN=http://localhost:5173,http://<PI-IP>:5173, https://app.example.com
+var allowedOrigins = (Environment.GetEnvironmentVariable("FRONTEND_ORIGIN")
+                      ?? "http://192.168.0.168:5173")
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
 // get the connection string
 var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION")
-    ?? builder.Configuration.GetConnectionString("DefaultConnection"); // 
+    ?? builder.Configuration.GetConnectionString("DefaultConnection"); 
 
 // DB-Kontext using SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -24,9 +27,11 @@ builder.Services.AddScoped<ITransactionQueries, TransactionQueries>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(CorsPolicy, policy => 
-        policy.WithOrigins(allowedOrigin)
+        policy.WithOrigins(allowedOrigins)
         .AllowAnyHeader()
         .AllowAnyMethod());
+    // Later for auth with cookies:
+    // .AllowCredentials()
 });
 
 builder.Services
@@ -36,7 +41,6 @@ builder.Services
         o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
