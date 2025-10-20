@@ -1,3 +1,3 @@
 FROM caddy:latest
-# Caddyfile liegt im gleichen Ordner wie diese Dockerfile
+
 COPY Caddyfile /etc/caddy/Caddyfile
