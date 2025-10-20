@@ -1,22 +1,11 @@
 :80 {
-
-  @root path /
-  redir @root /financetracker/ 301
-
-  @ft_noslash path /financetracker
-  redir @ft_noslash /financetracker/ 301
-
-  handle /financetracker/api* {
-    uri strip_prefix /financetracker
+  handle_path /financetracker/api* {
     reverse_proxy financetracker-api:8080
   }
-
-  handle /financetracker* {
-    uri strip_prefix /financetracker
-    reverse_proxy financetracker-web:5173
+  handle_path /financetracker/* {
+    reverse_proxy financetracker-web:5173 {
+      header_up Host {upstream_hostport}
+    }
   }
-
-  handle {
-    respond "Not found" 404
-  }
+  respond "Not found" 404
 }
