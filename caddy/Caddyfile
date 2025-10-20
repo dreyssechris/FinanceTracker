@@ -1,11 +1,8 @@
 :80 {
-  # API: /financetracker/api -> /api (upstream expects /api)
   handle /financetracker/api* {
     uri strip_prefix /financetracker
     reverse_proxy financetracker-api:8080
   }
-
-  # Frontend (Vite): /financetracker/* -> /* for Vite
   handle /financetracker* {
     uri strip_prefix /financetracker
     reverse_proxy financetracker-web:5173
