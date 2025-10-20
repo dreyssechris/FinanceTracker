@@ -63,14 +63,15 @@ services:
       - db
 
   caddy:
-    image: caddy:latest
+    build:
+      context: ./caddy             # builds from caddy subfolder
+      dockerfile: Dockerfile.caddy # Dockerfile which sets up Caddy
     container_name: caddy
     restart: unless-stopped
     ports:
       - "8080:80"         # Dev-Starting: http://<PI-IP>:8080/financetracker
       # - "8443:443"      # For Future Dev HTTPS
     volumes:
-      - ./caddy:/etc/caddy:ro
       - caddy-data:/data
       - caddy-config:/config
     depends_on:
