@@ -6,20 +6,19 @@ WORKDIR /src
 ENV NUGET_PACKAGES=/root/.nuget/packages
 
 # Only copy project files -> better caching 
-COPY *.csproj .
-RUN dotnet restore ./FinanceTracker.Api.csproj
+COPY *.csproj ./ 
+RUN dotnet restore ./FinanceTracker.Api.csproj --disable-parallel --nologo
 
 # Copy the rest of the code 
 COPY . .
 
 # Release Publish
-RUN dotnet publish ./FinanceTracker.Api.csproj -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish ./FinanceTracker.Api.csproj -c Release -o /app/publish /p:UseAppHost=false --nologo
 
 # === Runtime stage ===
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+COPY --from=build /app/publish ./
+ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
-
-COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "FinanceTracker.Api.dll"]
