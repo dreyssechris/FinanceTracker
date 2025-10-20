@@ -8,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 const string CorsPolicy = "AppCors";
 // multiple Origins via ENV, separated by comma:
 // FRONTEND_ORIGIN=http://localhost:5173,http://<PI-IP>:5173, https://app.example.com
-var allowedOrigins = (Environment.GetEnvironmentVariable("FRONTEND_ORIGIN")
-                      ?? "http://192.168.0.168:5173")
+var allowedOrigins = (Environment.GetEnvironmentVariable("CADDY_EXTERNAL_ORIGIN")
+                      ?? "http://192.168.0.168:8080")
     .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
 // get the connection string
