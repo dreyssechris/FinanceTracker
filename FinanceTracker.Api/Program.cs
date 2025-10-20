@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // const string CorsPolicy = "AppCors";
 // multiple Origins via ENV, separated by comma:
 // FRONTEND_ORIGIN=http://localhost:5173,http://<PI-IP>:5173, https://app.example.com
@@ -47,9 +48,9 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Behind Reverse Proxy: respect X-Forwarded-*
-app.UseForwardedHeaders(new ForwardedHeadersOptions {
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+// app.UseForwardedHeaders(new ForwardedHeadersOptions {
+//    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+// });
 
 using (var scope = app.Services.CreateScope())
 {

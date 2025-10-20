@@ -6,13 +6,16 @@ WORKDIR /src
 ENV NUGET_PACKAGES=/root/.nuget/packages
 
 # Only copy project files -> better caching 
-COPY *.csproj ./ 
+COPY FinanceTracker.Api.csproj ./FinanceTracker.Api.csproj
 RUN dotnet restore ./FinanceTracker.Api.csproj --disable-parallel --nologo
 
 # Copy the rest of the code 
 COPY . .
 
 # Release Publish
+RUN dotnet build ./FinanceTracker.Api.csproj -c Release --no-restore -v minimal
+
+# Publish
 RUN dotnet publish ./FinanceTracker.Api.csproj -c Release -o /app/publish /p:UseAppHost=false --nologo
 
 # === Runtime stage ===
