@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string CorsPolicy = "AppCors";
+// const string CorsPolicy = "AppCors";
 // multiple Origins via ENV, separated by comma:
 // FRONTEND_ORIGIN=http://localhost:5173,http://<PI-IP>:5173, https://app.example.com
 var allowedOrigins = (Environment.GetEnvironmentVariable("CADDY_EXTERNAL_ORIGIN")
@@ -24,15 +24,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ITransactionQueries, TransactionQueries>();
 
 // CORS for React Frontend
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(CorsPolicy, policy => 
-        policy.WithOrigins(allowedOrigins)
-        .AllowAnyHeader()
-        .AllowAnyMethod());
-    // Later for auth with cookies:
-    // .AllowCredentials()
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(CorsPolicy, policy => 
+//        policy.WithOrigins(allowedOrigins)
+//        .AllowAnyHeader()
+//        .AllowAnyMethod());
+//    // Later for auth with cookies:
+//    // .AllowCredentials()
+//});
 
 builder.Services
     .AddControllers()
@@ -45,6 +45,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Behind Reverse Proxy: respect X-Forwarded-*
+app.UseForwardedHeaders(new ForwardedHeadersOptions {
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 using (var scope = app.Services.CreateScope())
 {
@@ -59,7 +64,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();   // nice to have
-app.UseCors(CorsPolicy);
+// app.UseCors(CorsPolicy);
 app.UseAuthorization();
 
 app.MapControllers();

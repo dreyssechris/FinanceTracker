@@ -25,9 +25,9 @@ services:
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+      # Important: bind API to 8080 (Caddy Upstream)
+      ASPNETCORE_URLS: http://+:8080
       DEFAULT_CONNECTION: ${DEFAULT_CONNECTION}
-      # CORS: Browser request to caddy (http://<PI-IP>:8080)
-      FRONTEND_ORIGIN: ${CADDY_EXTERNAL_ORIGIN}
     depends_on:
       db:
         condition: service_healthy

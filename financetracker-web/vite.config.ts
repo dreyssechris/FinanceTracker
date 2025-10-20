@@ -2,13 +2,25 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  base: '/financetracker/',
+
   plugins: [react()],
-  base: '/financetracker',   // !important: Dev & Prod same sub-path
+
   server: {
-    port: 5173,
-    // should be enough HMR goes through Caddy reverse proxy
-    // If HMR has issues behind proxy, set IP address hard:
-    // origin: 'http://192.168.0.168:8080',
-    // hmr: { protocol: 'ws', host: '192.168.0.168', port: 8080 },
-  },
+    host: true,               // binds 0.0.0.0 in Container
+    strictPort: true,
+    // explicit Hosts instead of true (more stable and secure)
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      '192.168.0.168',        // Pi-IP
+      'financetracker-web',   // Docker-Hostname
+      'chrispicloud.dev'      // Domain
+    ],
+    hmr: {
+      protocol: 'ws',
+      host: '192.168.0.168',  // dev: Pi-IP; prod: Domain
+      port: 5173
+    }
+  }
 })
