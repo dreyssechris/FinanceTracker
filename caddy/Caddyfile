@@ -1,12 +1,9 @@
 :80 {
-  @finroot path /financetracker
-  redir @finroot /financetracker/
-
   handle_path /financetracker/api/* {
     reverse_proxy financetracker-api:8080
   }
 
-  handle_path /financetracker/* {
+  handle /financetracker/* {
     reverse_proxy financetracker-web:5173
   }
 
@@ -14,6 +11,7 @@
     respond "FinanceTracker gateway OK" 200
   }
 }
+
 
 # Prod later, real Domain + HTTPS
 # chrispicloud.dev {

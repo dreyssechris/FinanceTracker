@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import './App.css'
 import TransactionsPage from "./pages/TransactionsPage";
 
@@ -20,6 +20,7 @@ export default function App() {
       {/* Route-definitions */}
       <Routes>
         <Route path="/" element={<TransactionsPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

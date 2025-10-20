@@ -20,7 +20,9 @@ export default defineConfig({
     hmr: {
       protocol: 'ws',
       host: '192.168.0.168',  // dev: Pi-IP; prod: Domain
-      port: 5173
+      port: 5173,
+      clientPort: 8080,       // maps to Host-Port in Docker-Compose - browser connects to :8080 not :5173
+      path: '/financetracker' // subpath for HMR WebSocket without trailing slash
     }
   }
 })
