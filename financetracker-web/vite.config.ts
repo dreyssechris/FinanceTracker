@@ -13,15 +13,17 @@ export default defineConfig({
     allowedHosts: [
       'localhost',
       '127.0.0.1',
-      '192.168.0.168',        // Pi-IP
-      'financetracker-web',   // Docker-Hostname
-      'chrispicloud.dev'      // Domain
+      '192.168.0.168',          // Pi-IP
+      'financetracker-web',     // Docker-Hostname
+      'financetracker-web-dev', // Docker-Hostname Dev
+      'chrispicloud.dev',       // Domain
+      'dev.chrispicloud.dev'    // Dev-Domain
     ],
     hmr: {
-      protocol: 'ws',
-      host: '192.168.0.168',  // dev: Pi-IP; prod: Domain
+      protocol: 'wss',
+      host: 'dev.chrispicloud.dev',
       port: 5173,
-      clientPort: 8080,       // maps to Host-Port in Docker-Compose - browser connects to :8080 not :5173
+      clientPort: 443,        // Port used by client to connect to HMR WebSocket
       path: '/financetracker' // subpath for HMR WebSocket without trailing slash
     }
   }
