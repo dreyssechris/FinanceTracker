@@ -33,7 +33,7 @@ services:
 
   web:
     build:
-      context: ../../financetracker-web:/app
+      context: ../../financetracker-web
       dockerfile: Dockerfile.dev
     container_name: financetracker-web-dev
     restart: unless-stopped
@@ -61,7 +61,7 @@ services:
   caddy:
     build:
       context: ../../caddy
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.caddy
     container_name: caddy-dev
     restart: unless-stopped
     # ports: [] # -> external access via cloudflared tunnel only
