@@ -44,10 +44,6 @@ services:
       - "5173"
     depends_on:
       - api
-    # Für schnellere Iteration Frontend als Bind-Mount (optional):
-    volumes:
-      - ./financetracker-web:/app
-      - /app/node_modules
 
   # optional eigenes pgAdmin für Dev (anderer Host-Port, um Konflikte zu vermeiden)
   pgadmin:
@@ -63,15 +59,13 @@ services:
       - db
 
   caddy:
-    # Für Dev: bequem per Bind-Mount, damit Caddyfile-Änderungen ohne Rebuild greifen
-    image: caddy:2
+    build:
+      context: ../../caddy
+      dockerfile: Dockerfile.dev
     container_name: caddy-dev
     restart: unless-stopped
-    # Keine Ports publishen – Cloudflare Tunnel liefert externen Zugriff
-    # ports: []
+    # ports: [] # -> external access via cloudflared tunnel only
     volumes:
-      - ../../caddy/Caddyfile:/etc/caddy/Caddyfile:ro
-      # Für PROD-Block kann dist gemountet werden; Dev nutzt Vite
       - caddy-data-dev:/data
       - caddy-config-dev:/config
     depends_on:
