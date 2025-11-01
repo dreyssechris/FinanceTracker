@@ -76,11 +76,10 @@ services:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared-dev
     restart: unless-stopped
-    command: tunnel run
-    # teilt Netzwerk mit Caddy, damit "service: http://caddy:80" funktioniert
+    command: ["tunnel","--config","/etc/cloudflared/config.yml","run"]
     network_mode: service:caddy
     volumes:
-      - ~/.cloudflared:/etc/cloudflared
+      - /home/pi/.cloudflared:/etc/cloudflared
 
 volumes:
   pg-data-dev:
