@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+# Basic tooling
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl ca-certificates unzip \
+  && rm -rf /var/lib/apt/lists/*
+
+# Node.js 20 (Debian)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get update && apt-get install -y --no-install-recommends nodejs \
+  && rm -rf /var/lib/apt/lists/*
+
+# Optional: EF Core CLI (useful for migrations)
+RUN dotnet tool install --global dotnet-ef
+
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+WORKDIR /workspaces

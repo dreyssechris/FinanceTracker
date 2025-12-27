@@ -25,6 +25,17 @@ export default defineConfig({
       port: 5173,
       clientPort: 443,        // Port used by client to connect to HMR WebSocket
       path: '/financetracker' // subpath for HMR WebSocket without trailing slash
-    }
+    },
+
+    // localhost only: http://localhost:5173/api -> http://api:8080
+    proxy: {
+      '/api': {
+        target: 'http://api:8080',
+        changeOrigin: true,
+        rewrite: (p: string) => p.replace(/^\/api/, ''),
+      },
+    },
+
+
   }
 })

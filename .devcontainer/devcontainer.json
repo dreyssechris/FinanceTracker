@@ -1,11 +1,19 @@
 {
   "name": "FinanceTracker Dev",
   "dockerComposeFile": [
-    "../docker-compose.yml",
-    "../docker-compose.dev.yml"
+    "../deploy/compose/compose.base.yml",
+    "../deploy/compose/compose.local.yml"
   ],
-  "service": "workspace",
-  "workspaceFolder": "/workspace",
-  "shutdownAction": "stopCompose",
-  "remoteUser": "vscode"
+  "service": "devtools",
+  "workspaceFolder": "/workspaces/financetracker",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "postCreateCommand": "dotnet --info && node --version && npm --version"
 }

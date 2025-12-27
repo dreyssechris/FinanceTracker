@@ -1,0 +1,19 @@
+services:
+  api:
+    ports:
+      - "8080:8080"
+
+  web:
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: /api
+      
+  devtools:
+    build:
+      context: ../../
+      dockerfile: .devcontainer/Dockerfile.devtools
+    volumes:
+      - ../../:/workspaces/${COMPOSE_PROJECT_NAME:-financetracker}:cached
+    working_dir: /workspaces/${COMPOSE_PROJECT_NAME:-financetracker}
+    command: sleep infinity
