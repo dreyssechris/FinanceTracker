@@ -5,14 +5,14 @@
 
   caddy:
     build:
-      context: ../../caddy
+      context: ../../deploy/caddy
       dockerfile: Dockerfile.caddy
     container_name: caddy-dev
     restart: unless-stopped
     volumes:
       - caddy-data-dev:/data
       - caddy-config-dev:/config
-      - ../../caddy/Caddyfile.dev:/etc/caddy/Caddyfile:ro
+      - ../../deploy/caddy/Caddyfile.dev:/etc/caddy/Caddyfile:ro
     depends_on:
       - web
       - api

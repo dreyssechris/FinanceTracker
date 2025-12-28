@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // const string CorsPolicy = "AppCors";
 // multiple Origins via ENV, separated by comma:
 // FRONTEND_ORIGIN=http://localhost:5173,http://<PI-IP>:5173, https://app.example.com
@@ -14,8 +13,9 @@ var allowedOrigins = (Environment.GetEnvironmentVariable("CADDY_EXTERNAL_ORIGIN"
     .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
 // get the connection string
-var connectionString = Environment.GetEnvironmentVariable("DEFAULT_CONNECTION")
-    ?? builder.Configuration.GetConnectionString("DefaultConnection"); 
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not configured.");
 
 // DB-Kontext using SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>

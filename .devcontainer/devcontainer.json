@@ -5,7 +5,7 @@
     "../deploy/compose/compose.local.yml"
   ],
   "service": "devtools",
-  "workspaceFolder": "/workspaces/financetracker",
+  "workspaceFolder": "/workspaces/FinanceTracker",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -15,5 +15,6 @@
       ]
     }
   },
-  "postCreateCommand": "dotnet --info && node --version && npm --version"
+  "postCreateCommand": "dotnet tool restore && dotnet restore FinanceTracker.Api.sln && dotnet --info && node --version && npm --version",
+  "postStartCommand": ""
 }

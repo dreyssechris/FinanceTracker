@@ -17,14 +17,14 @@ services:
 
   api:
     build:
-      context: ../../FinanceTracker.Api
+      context: ../../src/FinanceTracker.Api
       dockerfile: Dockerfile
     container_name: financetracker-api
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
-      DEFAULT_CONNECTION: ${DEFAULT_CONNECTION}
+      ConnectionStrings__DefaultConnection: ${DEFAULT_CONNECTION}
     depends_on:
       db:
         condition: service_healthy
@@ -33,8 +33,8 @@ services:
 
   web:
     build:
-      context: ../../financetracker-web
-      dockerfile: Dockerfile.dev
+      context: ../../src/financetracker-web
+      dockerfile: Dockerfile
     container_name: financetracker-web
     restart: unless-stopped
     expose:
