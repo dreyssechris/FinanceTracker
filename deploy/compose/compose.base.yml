@@ -42,5 +42,17 @@ services:
     depends_on:
       - api
 
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: financetracker-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
 volumes:
   pg-data:

@@ -19,6 +19,24 @@ EXPOSE 8080
 CMD ["dotnet", "watch", "run", "--project", "FinanceTracker.Api.csproj", "--urls", "http://0.0.0.0:8080", "--non-interactive"]
 
 # =========================
+# Debug target (stable process for attach)
+# =========================
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS debug
+WORKDIR /src
+
+ENV NUGET_PACKAGES=/root/.nuget/packages
+
+# In debug we also copy the source (will be overridden by volume mount in compose)
+COPY . .
+
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+
+# Stable process (no watch restarts)
+CMD ["dotnet", "run", "--project", "FinanceTracker.Api.csproj", "--urls", "http://0.0.0.0:8080"]
+
+
+# =========================
 # Build target (CI/CD + prod publish)
 # =========================
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build

@@ -6,10 +6,18 @@ services:
   api:
     ports:
       - "8080:8080"
+    build: 
+      target: dev
+    volumes:
+      - ../../src/FinanceTracker.Api:/src:cached
+      - nuget-cache:/root/.nuget/packages
+      - nuget-http-cache:/root/.local/share/NuGet/v3-cache
 
   web:
     ports:
       - "5173:5173"
+    build:
+        target: dev
     environment:
       VITE_API_BASE_URL: /api
 
