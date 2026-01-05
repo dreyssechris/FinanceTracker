@@ -25,7 +25,6 @@ services:
     build:
       context: ../..
       dockerfile: .devcontainer/Dockerfile.devtools
-    container_name: financetracker-devtools
     volumes:
       - ../..:/workspaces/FinanceTracker:cached
       - nuget-cache:/root/.nuget/packages

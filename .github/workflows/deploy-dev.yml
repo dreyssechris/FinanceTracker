@@ -1,0 +1,78 @@
+name: Deploy DEV
+
+on:
+  push:
+    branches: ["develop"]
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, linux, arm64]
+
+    env:
+      DEPLOY_DIR: /opt/financetracker/dev
+      # Passe das an, wenn du eine andere Registry nutzt:
+      REGISTRY: ghcr.io
+      OWNER: ${{ github.repository_owner }}
+      REPO: ${{ github.event.repository.name }}
+      IMAGE_TAG: sha-${{ github.sha }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u "${{ github.actor }}" --password-stdin
+
+      - name: Prepare deploy directory
+        run: |
+          mkdir -p "${DEPLOY_DIR}"
+
+      # Compose-Files from repo sync to Pi (only those, which are relevant to DEV-Deployment)
+      - name: Sync compose files
+        run: |
+          rsync -av --delete ./deploy/compose/ "${DEPLOY_DIR}/compose/"
+
+      # This File writes the Image-Tag per Deployment (immutable)
+      - name: Write image tag env
+        run: |
+          echo "IMAGE_TAG=${IMAGE_TAG}" > "${DEPLOY_DIR}/.env.image"
+
+      - name: Deploy DEV stack
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: |
+          # Expected:
+          #   - ${DEPLOY_DIR}/.env         (deine Secrets / DB creds / etc. – dauerhaft auf dem Pi)
+          #   - ${DEPLOY_DIR}/.env.image   (vom Workflow generiert)
+          #
+          # Compose-Files:
+          #   - compose/base.yml
+          #   - compose/dev.yml
+          #   - compose/deploy.dev.images.yml   (neu, s.u.)
+          docker compose \
+            --env-file .env \
+            --env-file .env.image \
+            -f compose/base.yml \
+            -f compose/dev.yml \
+            -f compose/deploy.dev.images.yml \
+            pull
+
+          docker compose \
+            --env-file .env \
+            --env-file .env.image \
+            -f compose/base.yml \
+            -f compose/dev.yml \
+            -f compose/deploy.dev.images.yml \
+            up -d --remove-orphans
+
+      - name: Healthcheck
+        run: |
+          curl -fsS https://dev.chrispicloud.dev/health

@@ -1,0 +1,12 @@
+services:
+  api:
+    image: ghcr.io/${GITHUB_OWNER}/${GITHUB_REPO}-api:${IMAGE_TAG}
+    build: null
+
+  web:
+    image: ghcr.io/${GITHUB_OWNER}/${GITHUB_REPO}-web:${IMAGE_TAG}
+    build: null
+
+  caddy:
+    image: ghcr.io/${GITHUB_OWNER}/${GITHUB_REPO}-caddy-dev:${IMAGE_TAG}
+    build: null
